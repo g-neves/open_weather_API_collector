@@ -1,1 +1,1 @@
-# open_weather_API_collector
+# Open Weather API Collector
