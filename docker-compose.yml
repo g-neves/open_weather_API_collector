@@ -3,13 +3,6 @@ version: '3.1'
 
 services:
 
-  mongo-python-test:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
   weather-api:
     build: 
       context: .
@@ -17,4 +10,28 @@ services:
     ports:
       - 8000:8000
     depends_on: 
-      - mongo-python-test
+      - postgres
+      - rabbitmq
+
+  rabbitmq:
+    image: "rabbitmq:management"  
+    ports:
+      - "5672:5672"              # Standard RabbitMQ port
+      - "15672:15672"            # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin_password
+
+  postgres:
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin_password
+      - POSTGRES_DB=OpenWeatherDB
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

@@ -50,8 +50,9 @@ INSTALLED_APPS = [
     # 3rd party
     'rest_framework',
     'drf_yasg',
+    'celery',
     # Custom apps
-    'weather_api',
+    'open_weather_api',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,11 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Celery configurations
+CELERY_BROKER_URL = 'amqp://admin:admin_password@rabbitmq:5672//'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
