@@ -17,7 +17,7 @@ Including another URLconf
 # """
 
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
@@ -27,11 +27,11 @@ schema_view = get_schema_view(
         title="API that gathers data from open weather",
         default_version="v1",
         description="""
-## Introduction to the API
-This service provides the following features:
+            ## Introduction to the API
+            This service provides the following features:
 
-- ** Test
-      """,
+            - ** Test
+        """,
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
@@ -40,10 +40,10 @@ This service provides the following features:
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("open_weather_api.urls")),
-    path(
-        "swagger/",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
-    ),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+]
+
+urlpatterns += [
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-
+from drf_yasg.utils import swagger_auto_schema
 from .models import WeatherData
 
 API_KEY = settings.OPEN_WEATHER_API_KEY
@@ -83,6 +83,7 @@ class WeatherDataView(APIView):
 
 
 class ProgressView(APIView):
+    @swagger_auto_schema(operation_description="Endpoint to check the progress of the POST operation")
     def get(self, request, user_defined_id):
         user_defined_id_info = WeatherData.objects.filter(
             user_defined_id=user_defined_id
