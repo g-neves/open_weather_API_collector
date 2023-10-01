@@ -1,6 +1,3 @@
-# from gevent import monkey
-# monkey.patch_all()
-
 import datetime as dt
 import json
 import time
@@ -8,11 +5,11 @@ import time
 import grequests
 from django.conf import settings
 from django.http import JsonResponse, StreamingHttpResponse
-from django.views.decorators.http import condition
 from more_itertools import chunked
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from .models import WeatherData
 
@@ -49,7 +46,15 @@ class WeatherDataView(APIView):
             responses = [self.build_payload(response) for response in responses]
             user_defined_object = WeatherData.objects.filter(
                 user_defined_id=user_defined_id
-            )
+            ).first()
+            if not user_defined_object:
+                user_defined_object = WeatherData.objects.create(
+                    user_defined_id=user_defined_id,
+                    request_datetime=request_datetime,
+                    city_info={"cities_info": []}
+                )
+            user_defined_object.city_info["cities_info"].extend(responses)
+            user_defined_object.save() 
             yield ",".join(json.dumps(response) for response in responses)
             time.sleep(max(0, diff_to_11_seconds))
         yield "]}"
@@ -79,11 +84,20 @@ class WeatherDataView(APIView):
 
 class ProgressView(APIView):
     def get(self, request, user_defined_id):
-        # Handle the GET request to calculate and return progress percentage
         user_defined_id_info = WeatherData.objects.filter(
             user_defined_id=user_defined_id
-        )
+        ).first()
+        if not user_defined_id_info:
+            return JsonResponse({
+                "user_defined_id": user_defined_id,    
+                "Status": "User ID not found.",
+            },
+            status=status.HTTP_404_NOT_FOUND
+            )
         user_defined_id_progress = len(
             user_defined_id_info.city_info["cities_info"]
         ) / len(CITIES_IDS)
-        return JsonResponse({"Status": f"{round(user_defined_id_progress,2)}%"})
+        return JsonResponse({
+            "user_defined_id": user_defined_id,
+            "Status": f"{round(user_defined_id_progress*100,2)}%"
+        })

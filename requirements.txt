@@ -4,4 +4,6 @@ python-dotenv==1.0.0
 drf-yasg==1.21.7
 grequests==0.7.0
 more_itertools==10.1.0
-gunicorn
+gunicorn==21.2.0
+mock==5.1.0
+coverage==7.3.1
