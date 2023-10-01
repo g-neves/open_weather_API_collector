@@ -66,8 +66,8 @@ class WeatherDataView(APIView):
             req = json.loads(request.body)
             user_defined_id = req.get("user_defined_id")
             if not user_defined_id:
-                return JsonResponse({"status": "error"})
-            check_user_exists = WeatherData.objects.find(user_defined_id=user_defined_id).first()
+                return JsonResponse({"Error": "User ID not provided"}, status=400)
+            check_user_exists = WeatherData.objects.filter(user_defined_id=user_defined_id).first()
             if check_user_exists:
                 return JsonResponse({"Error": "User ID already exists"}, status=400)
             request_datetime = dt.datetime.now()
