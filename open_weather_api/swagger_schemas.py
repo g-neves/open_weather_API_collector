@@ -22,7 +22,7 @@ def post_response():
                     properties={
                         'city_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID of the city.'),
                         'temperature': openapi.Schema(type=openapi.TYPE_NUMBER, description='Temperature of the city.'),
-                        'humidity': openapi.Schema(type=openapi.TYPE_INTEGER, description='Humidity of the city.')
+                        'humidity': openapi.Schema(type=openapi.TYPE_NUMBER, description='Humidity of the city.')
                     },
                     required=['city_id', 'temperature', 'humidity']
                 ),
@@ -30,4 +30,14 @@ def post_response():
             )
         },
         required=['user_defined_id', 'request_datetime', 'city_info']
+    )
+
+def get_response():
+    return openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'user_defined_id': openapi.Schema(type=openapi.TYPE_STRING, description='ID defined by the user.'),
+            'Status': openapi.Schema(type=openapi.TYPE_STRING, description='Progress percentage for the specified user-defined ID.')
+        },
+        required=['user_defined_id', 'Status']
     )

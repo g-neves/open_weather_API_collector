@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from .models import WeatherData
-from .swagger_schemas import post_request, post_response
+from .swagger_schemas import post_request, post_response, get_response
 
 API_KEY = settings.OPEN_WEATHER_API_KEY
 URL = "https://api.openweathermap.org/data/2.5/weather?id={city_id}&appid={API_KEY}"
@@ -67,11 +67,15 @@ class WeatherDataView(APIView):
             user_defined_id = req.get("user_defined_id")
             if not user_defined_id:
                 return JsonResponse({"status": "error"})
+            check_user_exists = WeatherData.objects.find(user_defined_id=user_defined_id).first()
+            if check_user_exists:
+                return JsonResponse({"Error": "User ID already exists"}, status=400)
             request_datetime = dt.datetime.now()
             city_data = []
             cities_urls = (
                 URL.format(city_id=city_id, API_KEY=API_KEY) for city_id in CITIES_IDS
             )
+            # Using StreamingHttpResponse to avoid timeout
             response = StreamingHttpResponse(
                 self.call_weather_api(user_defined_id, request_datetime, cities_urls),
                 status=200,
@@ -81,11 +85,11 @@ class WeatherDataView(APIView):
 
             return response
         else:
-            return JsonResponse({"status": "error"})
+            return JsonResponse({"Error": "Method not allowed."}, status=400)
 
 
 class ProgressView(APIView):
-    @swagger_auto_schema(operation_description="Endpoint to check the progress of the POST operation")
+    @swagger_auto_schema(operation_description="Endpoint to check the progress of the POST operation", responses={200: get_response()})
     def get(self, request, user_defined_id):
         user_defined_id_info = WeatherData.objects.filter(
             user_defined_id=user_defined_id
