@@ -19,11 +19,11 @@ URL = "https://api.openweathermap.org/data/2.5/weather?id={city_id}&appid={API_K
 CITIES_IDS = settings.CITIES_IDS
 
 
-def to_celsius(temp):
+def kelvin_to_celsius(temp):
     """
-    Converts the temperature from Fahrenheit to Celsius.
+    Converts the temperature from Kelvin to Celsius.
     """
-    return round((-32 + temp) / 1.8, 2)
+    return round(temp - 273.15, 2)
 
 
 class WeatherDataView(APIView):
@@ -33,7 +33,7 @@ class WeatherDataView(APIView):
         """
         return {
             "city_id": response["id"],
-            "temperature": to_celsius(response["main"]["temp"]),
+            "temperature": kelvin_to_celsius(response["main"]["temp"]),
             "humidity": response["main"]["humidity"],
         }
 
@@ -72,7 +72,10 @@ class WeatherDataView(APIView):
     @swagger_auto_schema(request_body=post_request(), responses={200: post_response()})
     def post(self, request):
         if request.method == "POST":
-            req = json.loads(request.body)
+            try:
+                req = json.loads(request.body)
+            except json.JSONDecodeError:
+                return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
             user_defined_id = req.get("user_defined_id")
             if not user_defined_id:
                 return JsonResponse({"Error": "User ID not provided"}, status=400)
@@ -82,7 +85,6 @@ class WeatherDataView(APIView):
             if check_user_exists:
                 return JsonResponse({"Error": "User ID already exists"}, status=400)
             request_datetime = dt.datetime.now()
-            city_data = []
             cities_urls = (
                 URL.format(city_id=city_id, API_KEY=API_KEY) for city_id in CITIES_IDS
             )
