@@ -1,6 +1,7 @@
 django==4.2.1
 django_rest_framework==0.1.0
-requests==2.31.0
 python-dotenv==1.0.0
 drf-yasg==1.21.7
-celery[redis]
+grequests==0.7.0
+more_itertools==10.1.0
+gunicorn

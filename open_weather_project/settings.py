@@ -10,16 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
-from dotenv import load_dotenv 
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
 
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-with open('cities_id_list.txt', 'r') as f:
+with open("cities_id_list.txt", "r") as f:
     CITIES_IDS = f.read()
     CITIES_IDS = CITIES_IDS.split(",")
 
@@ -29,8 +30,8 @@ with open('cities_id_list.txt', 'r') as f:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = "django-insecure-g$p38*u3aqr3^jqrk(jnc1wnr(2gi7#**tcu_tbqmh*d5bbr@)"
-SECRET_KEY = os.getenv('SECRET_KEY')
-OPEN_WEATHER_API_KEY = os.getenv('OPEN_WEATHER_API_KEY')
+SECRET_KEY = os.getenv("SECRET_KEY")
+OPEN_WEATHER_API_KEY = os.getenv("OPEN_WEATHER_API_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,11 +49,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # 3rd party
-    'rest_framework',
-    'drf_yasg',
-    'celery',
+    "rest_framework",
+    "drf_yasg",
     # Custom apps
-    'open_weather_api',
+    "open_weather_api",
 ]
 
 MIDDLEWARE = [
@@ -137,11 +137,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Celery configurations
-CELERY_BROKER_URL = 'amqp://admin:admin_password@rabbitmq:5672//'
-
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'

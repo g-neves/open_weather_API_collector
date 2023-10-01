@@ -11,16 +11,16 @@ services:
       - 8000:8000
     depends_on: 
       - postgres
-      - rabbitmq
+      # - rabbitmq
 
-  rabbitmq:
-    image: "rabbitmq:management"  
-    ports:
-      - "5672:5672"              # Standard RabbitMQ port
-      - "15672:15672"            # Management UI port
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=admin_password
+  # rabbitmq:
+  #   image: "rabbitmq:management"  
+  #   ports:
+  #     # - "5672:5672"              # Standard RabbitMQ port
+  #     - "15672:15672"            # Management UI port
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=admin
+  #     - RABBITMQ_DEFAULT_PASS=admin_password
 
   postgres:
     image: "postgres:latest"
