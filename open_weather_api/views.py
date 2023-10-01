@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from .models import WeatherData
+from .swagger_schemas import post_request, post_response
 
 API_KEY = settings.OPEN_WEATHER_API_KEY
 URL = "https://api.openweathermap.org/data/2.5/weather?id={city_id}&appid={API_KEY}"
@@ -59,6 +60,7 @@ class WeatherDataView(APIView):
             time.sleep(max(0, diff_to_11_seconds))
         yield "]}"
 
+    @swagger_auto_schema(request_body=post_request(), responses={200: post_response()})
     def post(self, request):
         if request.method == "POST":
             req = json.loads(request.body)

@@ -9,5 +9,6 @@ RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
 COPY . /app
+RUN python manage.py makemigrations && python manage.py migrate
 EXPOSE 8000
 CMD ["gunicorn", "open_weather_project.wsgi:application", "-k", "gevent", "-b", "0.0.0.0:8000"]
