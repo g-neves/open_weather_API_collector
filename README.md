@@ -30,8 +30,8 @@ The Open Weather API Collector is a streamlined API designed to collect weather 
 
 For a visual and interactive documentation of the API, you can use Swagger and ReDoc. These tools provide insights into the endpoints, request-response structures, and more.
 
-* **Swagger**: Access at 
-* **ReDoc**: Access at 
+* **Swagger**: Access at **localhost:8000/swagger**
+* **ReDoc**: Access at **localhost:8000/redoc**
 
 ## Endpoints Usage
 
@@ -62,3 +62,8 @@ curl --request GET \
 ```
 
 Replace **`1`** with the corresponding **`user_defined_id`** you'd like to track.
+
+
+## Feedback and Contributions
+
+I value your feedback and contributions! If you have any suggestions, issues, or enhancements for the Open Weather API Collector, please open an issue or submit a pull request.

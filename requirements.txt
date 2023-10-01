@@ -7,3 +7,4 @@ more_itertools==10.1.0
 gunicorn==21.2.0
 mock==5.1.0
 coverage==7.3.1
+whitenoise==6.5.0
