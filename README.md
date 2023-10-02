@@ -92,6 +92,26 @@ and then
 coverage report
 ```
 
+## Design Considerations and Commentaries
+
+1. **Asynchronous Requests with **`grequests`**:** 
+The project utilizes grequests to handle asynchronous calls to the predefined Open Weather API endpoints. This choice facilitates efficient data collection from multiple sources concurrently. However, the free tier of Open Weather API restricts requests to a maximum of 60 calls per minute. To adhere to this limitation and prevent potential over-requesting, I've introduced a deliberate delay using **`time.sleep()`** in the POST view. This ensures that the application never exceeds the API's request limits, even when dealing with multiple asynchronous calls. 
+
+2. **Database Choice - SQLite:**
+The current implementation of the project uses SQLite as the database solution. This choice was based on the project's specifications, which did not indicate a large user volume or heavy traffic that would necessitate a more scalable database solution. However, should the need arise in the future, transitioning to PostgreSQL is straightforward. The `docker-compose.yml` file is already set up to accommodate PostgreSQL. To switch, one would simply need to include the necessary libraries for PostgreSQL connectivity. The versatility in database selection provides scalability options for future demands.
+
+3. **Utilizing `more-itertools`:** 
+   The `more-itertools` library is a valuable addition to the Python standard itertools, offering a richer set of utilities. Within this project, its `chunked` function was specifically employed to efficiently partition the list of URLs into manageable chunks. This approach is especially beneficial when dealing with rate limits or when wanting to make batch requests to an API, ensuring optimal performance and resource management.
+
+4. **Integration of `gunicorn`:** 
+   The choice to use `gunicorn` as the application server was twofold:
+   
+   a) **Compatibility with `grequests`**: The `grequests` library operates on top of `gevent`, a coroutine-based Python networking library. Due to certain nuances in how `gevent` patches Python's standard libraries for asynchronous operations, running the Django application using the traditional `python manage.py runserver` command can lead to unexpected behaviors. `gunicorn` with the `gevent` worker type alleviates these issues, providing a stable environment for asynchronous operations.
+   
+   b) **Concurrency**: With `gunicorn`, the application can concurrently handle multiple incoming requests. This is particularly useful in scenarios where a long-running POST request is being processed, and there's a need to serve other GET requests simultaneously. This level of concurrency ensures responsive user experiences and efficient request handling.
+
+5. **Integration of `whitenoise`:** 
+   Due to the use of `gunicorn` and the bypass of Django's traditional development server (`runserver`), serving static files (like the assets for Swagger and Redoc documentation) requires an external tool. `whitenoise` was chosen for this purpose. It seamlessly integrates with Django and serves static files directly from `gunicorn`. This avoids the need for a separate static file server or CDN during development, and ensures that tools like Swagger and Redoc operate smoothly.
 
 ## Feedback and Contributions
 
