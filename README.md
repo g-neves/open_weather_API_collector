@@ -56,7 +56,7 @@ Replace **`1`** with your desired **`user_defined_id`**.
 Monitor the progress of a previously initiated data collection process using its **`user_defined_id`**.
 
 ```
-curl --request GET \
+curl -L --request GET \
   --url http://localhost:8000/progress/1 \
   --header 'User-Agent: insomnia/8.1.0'
 ```
