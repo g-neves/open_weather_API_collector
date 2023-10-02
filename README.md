@@ -113,6 +113,10 @@ The current implementation of the project uses SQLite as the database solution. 
 5. **Integration of `whitenoise`:** 
    Due to the use of `gunicorn` and the bypass of Django's traditional development server (`runserver`), serving static files (like the assets for Swagger and Redoc documentation) requires an external tool. `whitenoise` was chosen for this purpose. It seamlessly integrates with Django and serves static files directly from `gunicorn`. This avoids the need for a separate static file server or CDN during development, and ensures that tools like Swagger and Redoc operate smoothly.
 
+### 6. Configuring the Open Weather API Key
+For the application to interact with the Open Weather API, users must provide their own API Key. This key should be set in the `.env` file. An illustrative example of how to set up the `.env` file is provided in the `.env_example` file.
+
+
 ## Feedback and Contributions
 
 I value your feedback and contributions! If you have any suggestions, issues, or enhancements for the Open Weather API Collector, please open an issue or submit a pull request.
