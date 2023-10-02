@@ -63,6 +63,35 @@ curl --request GET \
 
 Replace **`1`** with the corresponding **`user_defined_id`** you'd like to track.
 
+## Testing 
+
+Testing ensures the reliability and functionality of the application. The Open Weather API Collector uses Django's built-in testing tools for this purpose.
+
+### Setting Up the Test Environment:
+
+1. Navigate to the root directory of the Django project.
+2. Activate your virtual environment (if you're using one).
+3. Install the required testing packages:
+```
+pip install -r requirements.txt
+```
+
+### Running the Tests:
+
+To execute all tests:
+```
+python manage.py test open_weather_api --settings=open_weather_project.test_settings [--verbosity=2]
+```
+
+For investigating the testing coverage, run the following command
+```
+coverage run --source=open_weather_api manage.py test open_weather_api --settings=open_weather_project.test_settings [--verbosity=2]
+```
+and then
+```
+coverage report
+```
+
 
 ## Feedback and Contributions
 
