@@ -21,7 +21,8 @@ The Open Weather API Collector is a streamlined API designed to collect weather 
 
 1. Clone the repository to your local machine.
 2. Navigate to the project directory.
-3. Build and run the application using Docker:
+3. Rename the `.env_example` file to `.env` and insert your Open Weather API Key where indicated.
+4. Build and run the application using Docker:
 ```docker compose up --build```
 
 ## API Documentation
